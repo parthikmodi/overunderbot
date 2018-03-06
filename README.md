@@ -1,4 +1,4 @@
-# <a href="https://rhildred.github.io/overunderbot">overunderbot</a>
+# <a href="https://github.com/rhildred/overunderbot" target="_blank">overunderbot</a>
 
 Bot chooses a number. You guess. To run this on localhost you need to run `./ngrok http 5100` Copy the https forwarding url into your twilio messaging phone number:
 
