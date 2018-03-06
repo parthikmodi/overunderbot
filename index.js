@@ -16,12 +16,22 @@ app.get('/', function(req, res){
 });
 
 function Player(){
-    this.fWelcoming = function(twiml){
-        twiml.message("Welcome. I am thinking of a number between 1 and 100. What do you think it is?");
+    this.number = (Math.ceil(Math.random() * 100));
+    this.fWelcoming = function(req, twiml){
+        twiml.message("Welcome. I am thinking of a number between 1 and 100. What do you think it is? ");
         this.fCurstate = this.fGuessing;    
     }
-    this.fGuessing = function(twiml){
-        twiml.message("too high");
+    this.fGuessing = function(req, twiml){
+        if(req.body.Body > this.number){
+            twiml.message("too high");            
+        }else if(req.body.Body == this.number){
+            twiml.message("just right. Now I am thinking of another number");
+            this.number = (Math.ceil(Math.random() * 100));            
+        }else if(req.body.Body < this.number){
+            twiml.message("too low");
+        }else{
+            twiml.message("please enter a valid number");
+        }
     }    
     this.fCurstate = this.fWelcoming;
 }
@@ -34,7 +44,7 @@ app.post('/', function(req, res){
     }
     var twiml = new twilio.twiml.MessagingResponse();
     res.writeHead(200, {'Content-Type': 'text/xml'});
-    oPlayers[sFrom].fCurstate(twiml);
+    oPlayers[sFrom].fCurstate(req, twiml);
     var sMessage = twiml.toString();
     res.end(sMessage);
 });
