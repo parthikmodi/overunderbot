@@ -4,16 +4,14 @@ var twilio = require("twilio");
 
 var app = express();
 
+
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.set("port", 5100);
 
 var oPlayers = {};
 
-app.get('/', function(req, res){
-    res.end("Hello from the chatbot");
-
-});
+app.use(express.static('www'));
 
 function Player(){
     this.number = (Math.ceil(Math.random() * 100));
@@ -37,7 +35,7 @@ function Player(){
 }
 
 
-app.post('/', function(req, res){
+app.post('/sms', function(req, res){
     var sFrom = req.body.From;
     if(!oPlayers.hasOwnProperty(sFrom)){
         oPlayers[sFrom] = new Player();
