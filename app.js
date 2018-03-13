@@ -15,15 +15,19 @@ app.use(express.static('www'));
 
 function Player(){
     this.number = (Math.ceil(Math.random() * 100));
+    this.nGuesses = 0;
     this.fWelcoming = function(req, twiml){
         twiml.message("Welcome. I am thinking of a number between 1 and 100. What do you think it is? ");
         this.fCurstate = this.fGuessing;    
     }
     this.fGuessing = function(req, twiml){
+        this.nGuesses++;
         if(req.body.Body > this.number){
             twiml.message("too high");            
         }else if(req.body.Body == this.number){
-            twiml.message("just right. Now I am thinking of another number");
+            twiml.message("just right. " +
+            this.nGuesses + 
+            " guesses. Now I am thinking of another number");
             this.number = (Math.ceil(Math.random() * 100));            
         }else if(req.body.Body < this.number){
             twiml.message("too low");
