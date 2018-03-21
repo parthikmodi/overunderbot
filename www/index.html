@@ -9,7 +9,7 @@
     <div ng-app="myApp" ng-controller="myCtrl">
         <form>
             <div ng-repeat="(n, message) in messages track by n">{{message.From}}:&nbsp;{{message.Body}}</div>
-            <p>Message :
+            <p>Number :
                 <input type="text" ng-model="newMessageText">
                 <button type="submit" ng-click="addMessage()">Send</button>
             </p>

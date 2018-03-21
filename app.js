@@ -14,25 +14,76 @@ var oPlayers = {};
 app.use(express.static('www'));
 
 function Player(){
-    this.number = (Math.ceil(Math.random() * 100));
-    this.nGuesses = 0;
+    this.ncount = 0;
+    this.botNumber = 0;
+    this.guesses=1;
+    this.sum = 0;
+    
     this.fWelcoming = function(req, twiml){
-        twiml.message("Welcome. I am thinking of a number between 1 and 100. What do you think it is? ");
+        twiml.message("Welcome to 'Race To 100'. Enter digit between 1 to 10.\nSum = "+ this.sum );
         this.fCurstate = this.fGuessing;    
     }
     this.fGuessing = function(req, twiml){
-        this.nGuesses++;
-        if(req.body.Body > this.number){
-            twiml.message("too high");            
-        }else if(req.body.Body == this.number){
-            twiml.message("just right. " +
-            this.nGuesses + 
-            " guesses. Now I am thinking of another number");
-            this.number = (Math.ceil(Math.random() * 100));            
-        }else if(req.body.Body < this.number){
-            twiml.message("too low");
+    
+        if(req.body.Body > 10){
+            twiml.message("Too high. Please enter digit between 1 to 10.\nSum = "+ this.sum );
+        }
+        else if(req.body.Body < 0){
+            twiml.message("Too Low. Please enter digit between 1 to 10.\nSum = "+ this.sum );
+        }
+        else if(req.body.Body > 0 && req.body.Body < 11){
+                this.guesses++;
+                this.sum = parseInt(this.sum,10) + parseInt(req.body.Body,10) ;
+                    if(this.sum >= 100)
+                    {
+
+                        twiml.message("Congratulatitions!! You won . you reach to "+ this.sum );
+                        this.sum = 0;
+                        return;
+                    }
+                    else
+                    {
+                        twiml.message("You entered "+ req.body.Body +". Sum = "+ this.sum );
+                        this.botNumber = 11;
+                        if(this.guesses>5)
+                        {
+                            this.ncount = 9;
+                            while(this.botNumber>10)
+                            {
+                                this.botNumber = this.ncount*10 + this.ncount+1 - this.sum;
+                                if(this.botNumber == 0 || this.botNumber < 0)
+                                    {
+                                        while(this.botNumber < 1 || this.botNumber > 10)
+                                            {
+                                                this.botNumber = (Math.ceil(Math.random() * 10));
+                                            }
+                                            break;
+                                    }
+                                this.ncount--;
+                        
+                            }
+                        }
+                        else
+                        {
+                            while(this.botNumber < 1 || this.botNumber > 10)
+                                {
+                                    this.botNumber = (Math.ceil(Math.random() * 10));
+                                }
+                        }
+                        this.sum += this.botNumber ;
+                        twiml.message("  Bot entered "+ this.botNumber +".  Sum = "+ this.sum );
+                        if(this.sum>=100)
+                        {
+                            this.sum = 0 ;
+                            twiml.message("Bot won!! You missed this time,better luck next time" );
+                            return;
+                        }
+                        
+                        twiml.message("  Enter digit between 1 to 10" );
+                    }
+            
         }else{
-            twiml.message("please enter a valid number");
+            twiml.message("please enter a valid number");  
         }
     }    
     this.fCurstate = this.fWelcoming;
