@@ -52,15 +52,14 @@ function Player(){
                             {
                                 this.botNumber = this.ncount*10 + this.ncount+1 - this.sum;
                                 if(this.botNumber == 0 || this.botNumber < 0)
-                                    {
-                                        while(this.botNumber < 1 || this.botNumber > 10)
-                                            {
-                                                this.botNumber = (Math.ceil(Math.random() * 10));
-                                            }
-                                            break;
-                                    }
-                                this.ncount--;
-                        
+                                {
+                                    while(this.botNumber < 1 || this.botNumber > 10)
+                                        {
+                                            this.botNumber = (Math.ceil(Math.random() * 10));
+                                        }
+                                        break;
+                                }
+                                this.ncount--;                       
                             }
                         }
                         else
